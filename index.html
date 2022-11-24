@@ -36,7 +36,11 @@
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
+      var form2 = document.getElementById('form2');
+      var input2 = document.getElementById('input2');
 
+
+      // Phone client 
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
@@ -44,7 +48,16 @@
           input.value = '';
         }
       });
+    
+      socket.on('watch_response', function(msg) {
+        var item = document.createElement('li');
+        const resp = JSON.parse(msg);
+        item.textContent = "[Phone UI] Response from watch: "  + resp.choice;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
 
+      // Watch client       
       form2.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input2.value) {
@@ -57,15 +70,6 @@
       socket.on('pairing_request', function(msg) {
         var item = document.createElement('li');
         item.textContent = "[Watch UI] Pairing request received with msg: " + msg;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      });
-
-    
-      socket.on('watch_response', function(msg) {
-        var item = document.createElement('li');
-        const resp = JSON.parse(msg);
-        item.textContent = "[Phone UI] Response from watch: "  + resp.choice;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
